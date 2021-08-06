@@ -1,0 +1,3 @@
+'''Configurations'''
+
+SECRET = 'SecretKey01'
