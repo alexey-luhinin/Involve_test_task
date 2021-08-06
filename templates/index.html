@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}
+    <title>Pay</title>
+{% endblock %}
+{% block body %}
+    <form action="#" method="POST">
+        <p>
+            <label for="amount">Сумма оплаты:</label>
+            <input type="text" name="amount" id="amount">
+        </p>
+        <p>
+            <label for="currency">Валюта оплаты:</label>
+            <select name="currency" size=1 id="currency">
+                <option value="840">USD</option>
+                <option value="643">RUB</option>
+                <option value="978">EUR</option>
+            </select>
+        </p>
+        <p>
+            <label for="description">Описание товара:</label>
+            <textarea name="description" cols="30" rows="10" id="description">
+            </textarea>
+        </p>
+        <input type="submit" value="Оплатить">
+    </form>
+{% endblock %}
