@@ -11,7 +11,11 @@ document.addEventListener('DOMContentLoaded', function(){
             currency: currency.value,
             description: description.value,
             shop_id: '5',
-            shop_order_id: '109'
+            shop_order_id: '109',
+            shop_amount: amount.value,
+            shop_currency: currency.value,
+            payer_currency: currency.value,
+            payer_account: 'support@piastrix.com'
         };
 
         fetch('/', {
@@ -22,8 +26,10 @@ document.addEventListener('DOMContentLoaded', function(){
             })
         }).then(function(response) {
             response.json().then(function(value) {
-                uri = value['uri']
-                delete value['uri']
+                uri = value['url']
+                method = value['method']
+                delete value['url']
+                delete value['method']
                 Object.keys(value).forEach(function(key) {
                     field = document.getElementById(key)
                     form = document.getElementById('pay')
@@ -35,7 +41,8 @@ document.addEventListener('DOMContentLoaded', function(){
                         form.appendChild(input);
                     };
 
-                    form.setAttribute('action', uri)
+                    form.setAttribute('action', uri);
+                    form.setAttribute('method', method);
                     form.submit();
                 });
             });
