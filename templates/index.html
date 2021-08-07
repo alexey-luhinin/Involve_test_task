@@ -3,7 +3,7 @@
     <title>Pay</title>
 {% endblock %}
 {% block body %}
-    <form action="https://pay.piastrix.com/en/pay" method="POST" name="pay">
+    <form action="#" method="POST" name="pay" id="pay">
         <p>
             {{ form.amount.label }}
             {{ form.amount }}
@@ -16,29 +16,7 @@
             {{ form.description.label }}
             {{ form.description }}
         </p>
-            {{ form.shop_id }}
-            {{ form.shop_order_id }}
-            {{ form.sign }}
 
         <input type="submit" value="Оплатить">
-        <!-- <p> -->
-        <!--     <label for="amount">Сумма оплаты:</label> -->
-        <!--     <input type="text" name="amount" id="amount"> -->
-        <!-- </p> -->
-        <!-- <p> -->
-        <!--     <label for="currency">Валюта оплаты:</label> -->
-        <!--     <select name="currency" size=1 id="currency"> -->
-        <!--         <option value="840">USD</option> -->
-        <!--         <option value="643">RUB</option> -->
-        <!--         <option value="978">EUR</option> -->
-        <!--     </select> -->
-        <!-- </p> -->
-        <!-- <p> -->
-        <!--     <label for="description">Описание товара:</label> -->
-        <!--     <textarea name="description" cols="30" rows="10" id="description"></textarea> -->
-        <!-- </p> -->
-        <!-- <input type="hidden" name="shop_id" value="5"> -->
-        <!-- <input type="hidden" name="shop_order_id" value="0"> -->
-        <!-- <input type="hidden" name="sign" value=""> -->
     </form>
 {% endblock %}
