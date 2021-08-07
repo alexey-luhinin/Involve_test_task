@@ -24,15 +24,16 @@ document.addEventListener('DOMContentLoaded', function(){
             response.json().then(function(value) {
                 Object.keys(value).forEach(function(key) {
                     field = document.getElementById(key)
+                    form = document.getElementById('pay')
                     if (field == null) {
                         let input = document.createElement('input');
                         input.setAttribute('type', 'hidden');
                         input.setAttribute('name', key);
                         input.setAttribute('value', value[key]);
-                        form = document.getElementById('pay')
-                        form.appendChild(input)
-                        form.submit()
-                    }
+                        form.appendChild(input);
+                    };
+
+                    form.submit();
                 });
             });
         });
