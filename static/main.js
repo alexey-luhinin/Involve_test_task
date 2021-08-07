@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', function(){
             })
         }).then(function(response) {
             response.json().then(function(value) {
+                uri = value['uri']
+                delete value['uri']
                 Object.keys(value).forEach(function(key) {
                     field = document.getElementById(key)
                     form = document.getElementById('pay')
@@ -33,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function(){
                         form.appendChild(input);
                     };
 
+                    form.setAttribute('action', uri)
                     form.submit();
                 });
             });
