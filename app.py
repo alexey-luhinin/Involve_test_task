@@ -1,9 +1,9 @@
 '''Views'''
-import requests
 from typing import List
 from flask import Flask, render_template, request, jsonify
-from forms import PayForm
+import requests
 from config import SECRET, Payment, Currency
+from forms import PayForm
 from utils import list_to_str, get_sha256
 
 app = Flask(__name__)
@@ -31,7 +31,7 @@ def index():
 
         if currency == str(Currency.USD.value):
             usd_payment = Payment(
-                uri='',
+                uri='https://core.piastrix.com/bill/create',
                 required_fields=['shop_amount', 'shop_currency',
                                  'shop_id', 'shop_order_id',
                                  'payer_currency']
@@ -40,14 +40,14 @@ def index():
             data = add_sign(usd_payment.required_fields, user_request)
 
             response = requests.post(
-                url='https://core.piastrix.com/bill/create',
+                url=usd_payment.uri,
                 json=data,
             )
 
             data_json = response.json()['data']
             data_json['method'] = 'GET'
             return jsonify(data_json)
-        
+
         if currency == str(Currency.RUB.value):
             pass
 
