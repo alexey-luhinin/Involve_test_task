@@ -1,21 +1,15 @@
 document.addEventListener('DOMContentLoaded', function(){
-    let btn = document.querySelector('input[type=submit]');
-    btn.addEventListener('click', function(event){
+    let form = document.getElementById('form');
+    form.addEventListener('submit', function(event){
         event.preventDefault();
-        let amount = document.getElementById('amount')
-        let currency = document.getElementById('currency')
-        let description = document.getElementById('description')
+        let amount = document.getElementById('amount').value
+        let currency = document.getElementById('currency').value
+        let description = document.getElementById('description').value
 
         let entry = {
-            amount: amount.value,
-            currency: currency.value,
-            description: description.value,
-            shop_id: '5',
-            shop_order_id: '109',
-            shop_amount: amount.value,
-            shop_currency: currency.value,
-            payer_currency: currency.value,
-            payer_account: 'support@piastrix.com'
+            amount: amount,
+            currency: currency,
+            description: description,
         };
 
         fetch('/', {
@@ -25,26 +19,23 @@ document.addEventListener('DOMContentLoaded', function(){
                 'content-type': 'application/json'
             })
         }).then(function(response) {
-            response.json().then(function(value) {
-                uri = value['url']
-                method = value['method']
-                delete value['url']
-                delete value['method']
-                Object.keys(value).forEach(function(key) {
-                    field = document.getElementById(key)
-                    form = document.getElementById('pay')
-                    if (field == null) {
-                        let input = document.createElement('input');
-                        input.setAttribute('type', 'hidden');
-                        input.setAttribute('name', key);
-                        input.setAttribute('value', value[key]);
-                        form.appendChild(input);
-                    };
-
-                    form.setAttribute('action', uri);
-                    form.setAttribute('method', method);
-                    form.submit();
-                });
+            response.json().then(function(data) {
+                let method = data['method']
+                let action = data['action']
+                delete data.method
+                delete data.action
+                let form = document.createElement('form')
+                form.method = method
+                form.action = action
+                for (let key in data) {
+                    let element = document.createElement('input')
+                    element.setAttribute('type', 'hidden') 
+                    element.setAttribute('name', key)
+                    element.setAttribute('value', data[key])
+                    form.appendChild(element)
+                }
+                document.body.appendChild(form)
+                form.submit()
             });
         });
     });
