@@ -3,15 +3,21 @@ from wtforms import (
     Form,
     DecimalField,
     SelectField,
-    TextAreaField
+    TextAreaField,
+    SubmitField
 )
+
+from wtforms.validators import InputRequired
 
 from config import Currency
 
 class PayForm(Form):
-    amount = DecimalField('Сумма оплаты')
-    currency = SelectField('Валюта оплаты',
+    class Meta:
+        locales = ('ru_RU', 'ru')
+    amount = DecimalField('Сумма оплаты:', validators=[InputRequired()])
+    currency = SelectField('Валюта оплаты:',
                            choices=[(Currency.EUR.value, Currency.EUR.name),
                                     (Currency.USD.value, Currency.USD.name),
                                     (Currency.RUB.value, Currency.RUB.name)])
-    description = TextAreaField('Описание товара')
+    description = TextAreaField('Описание товара:')
+    submit = SubmitField('Оплатить')
