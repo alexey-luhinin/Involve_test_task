@@ -1,11 +1,18 @@
-input {
-   display: block;
-} 
+/* input { */
+/*    display: block; */
+/* } */ 
 
-select {
-    display: block
-}
+/* select { */
+/*     display: block */
+/* } */
 
-textarea {
-    display: block;
+/* textarea { */
+/*     display: block; */
+/* } */
+
+.form-pay {
+    width: 50%;
+    max-width: 400px;
+    max-width: 600px;
+    margin: 20px;
 }
