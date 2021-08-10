@@ -2,7 +2,7 @@
 from typing import List
 import requests
 from utils import get_sha256
-from config import SECRET, ERROR_MESSAGE
+from config import SECRET, ERROR_MESSAGE, logger
 
 
 def eur_handler(user_request: dict) -> dict:
@@ -20,6 +20,12 @@ def eur_handler(user_request: dict) -> dict:
     signed_data = add_sign(required_fields, full_request)
     signed_data['method'] = 'POST'
     signed_data['action'] = 'https://pay.piastrix.com/en/pay'
+
+    logger.info('id: {}, currency: {}, amount: {}, description: {}',
+                full_request['shop_order_id'],
+                full_request['currency'],
+                full_request['amount'],
+                full_request['description'])
 
     return signed_data
 
@@ -39,7 +45,7 @@ def usd_handler(user_request: dict) -> dict:
         'payer_account': 'support@piastrix.com'
     }
 
-    full_request = {**fields}
+    full_request = {**user_request, **fields}
 
     signed_data = add_sign(required_fields, full_request)
 
@@ -50,16 +56,27 @@ def usd_handler(user_request: dict) -> dict:
 
     if response.status_code == 200:
         data_json = response.json().get('data')
-        try:
-            data_json['method'] = 'GET'
-            data_json['action'] = data_json['url']
-            del data_json['url']
-        except TypeError as error:
-            print(error)
-            return {'error': ERROR_MESSAGE}
+        if data_json:
+            try:
+                data_json['method'] = 'GET'
+                data_json['action'] = data_json['url']
+                del data_json['url']
+            except TypeError as error:
+                logger.warning(error)
+                return {'error': ERROR_MESSAGE}
 
-        return data_json
+            logger.info('id: {}, currency: {}, amount: {}, description: {}',
+                        full_request['shop_order_id'],
+                        full_request['currency'],
+                        full_request['amount'],
+                        full_request['description'])
 
+            return data_json
+
+        logger.warning('Key "data" is not found!')
+        return {'error': ERROR_MESSAGE}
+
+    logger.warning('Status code: {}', response.status_code)
     return {'error': ERROR_MESSAGE}
 
 
@@ -91,11 +108,21 @@ def rub_handler(user_request: dict) -> dict:
                 data_json['method'] = response_json.get('method')
                 data_json['action'] = response_json.get('url')
             except TypeError as error:
-                print(error)
+                logger.warning(error)
                 return {'error': ERROR_MESSAGE}
+
+            logger.info('id: {}, currency: {}, amount: {}, description: {}',
+                        full_request['shop_order_id'],
+                        full_request['currency'],
+                        full_request['amount'],
+                        full_request['description'])
 
             return data_json
 
+        logger.warning('Key "data" is not found!')
+        return {'error': ERROR_MESSAGE}
+
+    logger.warning('Status code: {}', response.status_code)
     return {'error': ERROR_MESSAGE}
 
 
