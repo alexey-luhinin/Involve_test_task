@@ -2,6 +2,7 @@
 from enum import Enum
 
 SECRET = 'SecretKey01'
+ERROR_MESSAGE = 'Something went wrong...'
 
 
 class Currency(Enum):
