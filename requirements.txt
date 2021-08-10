@@ -12,8 +12,8 @@ lazy-object-proxy==1.6.0
 MarkupSafe==2.0.1
 mccabe==0.6.1
 pylint==2.9.6
+requests==2.26.0
 toml==0.10.2
 urllib3==1.26.6
 Werkzeug==2.0.1
 wrapt==1.12.1
-WTForms==2.3.3
