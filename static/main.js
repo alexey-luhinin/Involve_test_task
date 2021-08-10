@@ -20,22 +20,28 @@ document.addEventListener('DOMContentLoaded', function(){
             })
         }).then(function(response) {
             response.json().then(function(data) {
-                let method = data['method']
-                let action = data['action']
-                delete data.method
-                delete data.action
-                let form = document.createElement('form')
-                form.method = method
-                form.action = action
-                for (let key in data) {
-                    let element = document.createElement('input')
-                    element.setAttribute('type', 'hidden') 
-                    element.setAttribute('name', key)
-                    element.setAttribute('value', data[key])
-                    form.appendChild(element)
+                if ('error' in data){
+                    document.body.innerHTML = data['error']
                 }
-                document.body.appendChild(form)
-                form.submit()
+                else 
+                {
+                    let method = data['method']
+                    let action = data['action']
+                    delete data.method
+                    delete data.action
+                    let form = document.createElement('form')
+                    form.method = method
+                    form.action = action
+                    for (let key in data) {
+                        let element = document.createElement('input')
+                        element.setAttribute('type', 'hidden') 
+                        element.setAttribute('name', key)
+                        element.setAttribute('value', data[key])
+                        form.appendChild(element)
+                    }
+                    document.body.appendChild(form)
+                    form.submit()
+                }
             });
         });
     });
