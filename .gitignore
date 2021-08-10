@@ -2,3 +2,5 @@ done.*
 todo.*
 venv/
 __pycache__/
+*.db
+.log/
