@@ -3,6 +3,7 @@ from typing import List
 import requests
 from utils import get_sha256
 from config import SECRET, ERROR_MESSAGE, logger
+from models import Payment
 
 
 def eur_handler(user_request: dict) -> dict:
@@ -21,11 +22,9 @@ def eur_handler(user_request: dict) -> dict:
     signed_data['method'] = 'POST'
     signed_data['action'] = 'https://pay.piastrix.com/en/pay'
 
-    logger.info('id: {}, currency: {}, amount: {}, description: {}',
-                full_request['shop_order_id'],
-                full_request['currency'],
-                full_request['amount'],
-                full_request['description'])
+    logging(full_request)
+
+    insert_into_db(full_request)
 
     return signed_data
 
@@ -65,11 +64,9 @@ def usd_handler(user_request: dict) -> dict:
                 logger.warning(error)
                 return {'error': ERROR_MESSAGE}
 
-            logger.info('id: {}, currency: {}, amount: {}, description: {}',
-                        full_request['shop_order_id'],
-                        full_request['currency'],
-                        full_request['amount'],
-                        full_request['description'])
+            logging(full_request)
+
+            insert_into_db(full_request)
 
             return data_json
 
@@ -111,11 +108,9 @@ def rub_handler(user_request: dict) -> dict:
                 logger.warning(error)
                 return {'error': ERROR_MESSAGE}
 
-            logger.info('id: {}, currency: {}, amount: {}, description: {}',
-                        full_request['shop_order_id'],
-                        full_request['currency'],
-                        full_request['amount'],
-                        full_request['description'])
+            logging(full_request)
+
+            insert_into_db(full_request)
 
             return data_json
 
@@ -138,3 +133,27 @@ def add_sign(required_fields: List[str], user_request: dict) -> dict:
     signed_data['sign'] = sign_hashed
 
     return {**user_request, **signed_data}
+
+
+def logging(data: dict) -> None:
+    '''Logging information to file'''
+    logger.info('id: {}, currency: {}, amount: {}, description: {}',
+                data['shop_order_id'],
+                data['currency'],
+                data['amount'],
+                data['description'])
+
+
+def insert_into_db(data: dict) -> None:
+    '''Save information to database'''
+    payment = Payment(
+        currency=data['currency'],
+        amount=data['amount'],
+        description=data['description'],
+        shop_order_id=data['shop_order_id']
+    )
+
+    try:
+        payment.save()
+    except Exception as error:
+        logger.warning(error)
