@@ -9,8 +9,10 @@ isort==5.9.3
 itsdangerous==2.0.1
 Jinja2==3.0.1
 lazy-object-proxy==1.6.0
+loguru==0.5.3
 MarkupSafe==2.0.1
 mccabe==0.6.1
+peewee==3.14.4
 pylint==2.9.6
 requests==2.26.0
 toml==0.10.2
