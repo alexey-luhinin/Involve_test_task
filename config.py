@@ -16,7 +16,7 @@ with db:
     db.create_tables([Payment])
 
 SECRET = 'SecretKey01'
-ERROR_MESSAGE = 'Something went wrong...'
+ERROR_MESSAGE = {'error': 'Something went wrong...'}
 
 
 class Currency(Enum):
