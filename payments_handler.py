@@ -48,33 +48,29 @@ def usd_handler(user_request: dict) -> dict:
 
     signed_data = add_sign(required_fields, full_request)
 
-    response = requests.post(
+    response = get_response(
         url='https://core.piastrix.com/bill/create',
         json=signed_data,
     )
 
-    if response.status_code == 200:
-        data_json = response.json().get('data')
-        if data_json:
-            try:
-                data_json['method'] = 'GET'
-                data_json['action'] = data_json['url']
-                del data_json['url']
-            except TypeError as error:
-                logger.warning(error)
-                return {'error': ERROR_MESSAGE}
+    data_json = response.json().get('data')
+    if data_json:
+        try:
+            data_json['method'] = 'GET'
+            data_json['action'] = data_json['url']
+            del data_json['url']
+        except TypeError as error:
+            logger.warning(error)
+            return ERROR_MESSAGE
 
-            logging(full_request)
+        logging(full_request)
 
-            insert_into_db(full_request)
+        insert_into_db(full_request)
 
-            return data_json
+        return data_json
 
-        logger.warning('Key "data" is not found!')
-        return {'error': ERROR_MESSAGE}
-
-    logger.warning('Status code: {}', response.status_code)
-    return {'error': ERROR_MESSAGE}
+    logger.warning('Key "data" is not found!')
+    return ERROR_MESSAGE
 
 
 def rub_handler(user_request: dict) -> dict:
@@ -92,33 +88,29 @@ def rub_handler(user_request: dict) -> dict:
 
     signed_data = add_sign(required_fields, full_request)
 
-    response = requests.post(
+    response = get_response(
         url='https://core.piastrix.com/invoice/create',
         json=signed_data,
     )
 
-    if response.status_code == 200:
-        response_json = response.json().get('data')
-        if response_json:
-            try:
-                data_json = response_json.get('data')
-                data_json['method'] = response_json.get('method')
-                data_json['action'] = response_json.get('url')
-            except TypeError as error:
-                logger.warning(error)
-                return {'error': ERROR_MESSAGE}
+    response_json = response.json().get('data')
+    if response_json:
+        try:
+            data_json = response_json.get('data')
+            data_json['method'] = response_json.get('method')
+            data_json['action'] = response_json.get('url')
+        except TypeError as error:
+            logger.warning(error)
+            return ERROR_MESSAGE
 
-            logging(full_request)
+        logging(full_request)
 
-            insert_into_db(full_request)
+        insert_into_db(full_request)
 
-            return data_json
+        return data_json
 
-        logger.warning('Key "data" is not found!')
-        return {'error': ERROR_MESSAGE}
-
-    logger.warning('Status code: {}', response.status_code)
-    return {'error': ERROR_MESSAGE}
+    logger.warning('Key "data" is not found!')
+    return ERROR_MESSAGE
 
 
 def add_sign(required_fields: List[str], user_request: dict) -> dict:
@@ -157,3 +149,17 @@ def insert_into_db(data: dict) -> None:
         payment.save()
     except Exception as error:
         logger.warning(error)
+
+
+def get_response(url: str, json: dict) -> dict:
+    '''Get response'''
+    response = requests.post(
+        url=url,
+        json=json,
+    )
+
+    if response.status_code == 200:
+        return response
+
+    logger.warning('Status code: {}', response.status_code)
+    return None
