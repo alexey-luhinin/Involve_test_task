@@ -1,4 +1,3 @@
-'''Tests for utils.py'''
 import pytest
 from utils import get_sha256
 
@@ -12,5 +11,4 @@ from utils import get_sha256
         ]
 )
 def test_get_sha256(text, expected):
-    '''Tests for get_sha256'''
     assert get_sha256(text) == expected

@@ -1,4 +1,3 @@
-'''Tests for views.py'''
 import pytest
 from app import app
 
