@@ -1,4 +1,3 @@
-'''Utils'''
 from hashlib import sha256
 
 

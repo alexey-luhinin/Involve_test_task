@@ -1,4 +1,3 @@
-'''Payments handler'''
 from typing import List
 import requests
 from utils import get_sha256
@@ -7,7 +6,6 @@ from models import Payment
 
 
 def eur_handler(user_request: dict) -> dict:
-    '''Eur handler'''
     required_fields = ['amount', 'currency',
                        'shop_id', 'shop_order_id']
 
@@ -30,7 +28,6 @@ def eur_handler(user_request: dict) -> dict:
 
 
 def usd_handler(user_request: dict) -> dict:
-    '''Usd handler'''
     required_fields = ['shop_amount', 'shop_currency',
                        'shop_id', 'shop_order_id',
                        'payer_currency']
@@ -69,12 +66,11 @@ def usd_handler(user_request: dict) -> dict:
 
         return data_json
 
-    logger.warning('Key "data" is not found!')
+    logger.warning(response.json().get('message'))
     return ERROR_MESSAGE
 
 
 def rub_handler(user_request: dict) -> dict:
-    '''Rub handler'''
     required_fields = ['amount', 'currency',
                        'payway', 'shop_id', 'shop_order_id']
 
@@ -94,6 +90,7 @@ def rub_handler(user_request: dict) -> dict:
     )
 
     response_json = response.json().get('data')
+    print(response_json)
     if response_json:
         try:
             data_json = response_json.get('data')
@@ -109,7 +106,7 @@ def rub_handler(user_request: dict) -> dict:
 
         return data_json
 
-    logger.warning('Key "data" is not found!')
+    logger.warning(response.json().get('message'))
     return ERROR_MESSAGE
 
 
@@ -128,7 +125,6 @@ def add_sign(required_fields: List[str], user_request: dict) -> dict:
 
 
 def logging(data: dict) -> None:
-    '''Logging information to file'''
     logger.info('id: {}, currency: {}, amount: {}, description: {}',
                 data['shop_order_id'],
                 data['currency'],
@@ -137,7 +133,6 @@ def logging(data: dict) -> None:
 
 
 def insert_into_db(data: dict) -> None:
-    '''Save information to database'''
     payment = Payment(
         currency=data['currency'],
         amount=data['amount'],
@@ -152,7 +147,6 @@ def insert_into_db(data: dict) -> None:
 
 
 def get_response(url: str, json: dict) -> dict:
-    '''Get response'''
     response = requests.post(
         url=url,
         json=json,

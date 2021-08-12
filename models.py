@@ -1,9 +1,8 @@
-'''Models'''
 from datetime import datetime
 from peewee import (
     SqliteDatabase,
     Model,
-    PrimaryKeyField,
+    AutoField,
     IntegerField,
     FloatField,
     CharField,
@@ -15,8 +14,7 @@ db = SqliteDatabase('payments.db')
 
 
 class Payment(Model):
-    '''Payment model'''
-    id = PrimaryKeyField(unique=True)
+    id = AutoField()
     date = DateTimeField(default=datetime.now())
     currency = IntegerField()
     amount = FloatField()
